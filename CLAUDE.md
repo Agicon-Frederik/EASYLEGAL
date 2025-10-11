@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Pefect
 
 ## Project Overview
 
@@ -32,6 +33,7 @@ EASYLEGAL is an Express.js backend application built with TypeScript.
 ## Architecture
 
 The application uses a simple Express.js server architecture:
+
 - Express 5.x for HTTP server
 - TypeScript for type safety
 - Port configurable via `PORT` environment variable (defaults to 3000)
