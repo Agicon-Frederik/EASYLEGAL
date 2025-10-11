@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # EC2 Setup Script for EASYLEGAL
 # This script sets up your EC2 instance for the first time
 
