@@ -72,7 +72,7 @@ fi
 
 # Clone repository (if directory doesn't exist)
 if [ ! -d "$APP_DIR" ]; then
-    echo "Enter your GitHub repository URL (e.g., https://github.com/username/easylegal.git):"
+    echo "Enter your GitHub repository URL (e.g., https://github.com/Agicon-Frederik/easylegal.git):"
     read REPO_URL
 
     git clone "$REPO_URL" "$APP_DIR"
