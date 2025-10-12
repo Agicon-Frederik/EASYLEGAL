@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  test:
-    name: Run Tests
+  test-and-build:
+    name: Test and Build Monorepo
     runs-on: ubuntu-latest
 
     steps:
@@ -21,17 +21,23 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Build common package
+        run: npm run build:common
 
-      - name: Build application
-        run: npm run build
+      - name: Build backend
+        run: npm run build:backend
+
+      - name: Run backend tests
+        run: npm run test:backend
+
+      - name: Build frontend
+        run: npm run build:frontend
 
   deploy:
     name: Deploy to EC2
-    needs: test
+    needs: test-and-build
     runs-on: ubuntu-latest
 
     steps:
@@ -52,17 +58,22 @@ jobs:
             # Pull latest code
             git pull origin main
 
-            # Install dependencies
-            npm ci --production=false
+            # Install all dependencies
+            npm install
 
-            # Run tests
-            npm test
+            # Build all packages
+            npm run build:common
+            npm run build:backend
+            npm run build:frontend
 
-            # Build application
-            npm run build
+            # Run backend tests
+            npm run test:backend
 
-            # Restart application with PM2
-            pm2 restart easylegal || pm2 start npm --name easylegal -- start
+            # Restart backend with PM2
+            pm2 restart easylegal-backend || pm2 start packages/backend/dist/index.js --name easylegal-backend
+
+            # Restart frontend with PM2 (if serving with a separate process)
+            # pm2 restart easylegal-frontend || pm2 start "npm run preview" --name easylegal-frontend --cwd packages/frontend
 
             # Save PM2 configuration
             pm2 save

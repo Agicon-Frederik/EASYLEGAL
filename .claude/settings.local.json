@@ -15,7 +15,8 @@
       "Bash(npm run build:frontend:*)",
       "Bash(claude mcp add chakra-ui:*)",
       "Bash(npm run build)",
-      "WebFetch(domain:easylegal.online)"
+      "WebFetch(domain:easylegal.online)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
