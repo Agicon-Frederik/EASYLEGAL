@@ -13,9 +13,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^7.0.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "i18next": "^25.6.0"
+    "i18next": "^25.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.9",
+    "sqlite3": "^5.1.7"
   }
 }

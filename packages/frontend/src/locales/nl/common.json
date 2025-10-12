@@ -28,15 +28,15 @@
   },
   "features": {
     "backend": {
-      "title": "Backend",
+      "title": "Feature 1",
       "description": "Express.js API met TypeScript, Jest testing en hot reload"
     },
     "frontend": {
-      "title": "Frontend",
+      "title": "Feature 2",
       "description": "React 19 met Chakra UI v3 componenten en Vite voor snelle builds"
     },
     "common": {
-      "title": "Gemeenschappelijk",
+      "title": "Feature 3",
       "description": "Gedeelde utilities, types en scripts in de monorepo"
     }
   },
@@ -46,8 +46,43 @@
       "count": "Telling: {{count}}"
     },
     "monorepo": {
-      "title": "Welkom bij uw Monorepo",
-      "description": "Dit is het frontend pakket van uw EASYLEGAL monorepo, gebouwd met de nieuwste Chakra UI componenten."
+      "title": "Welkom bij uw Easylegal",
+      "description": "Dit is het frontend pakket van uw EASYLEGAL, gebouwd met de nieuwste Chakra UI componenten."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Inloggen bij EASYLEGAL",
+      "subtitle": "Voer uw e-mail in om een magische link te ontvangen",
+      "emailLabel": "E-mailadres",
+      "emailPlaceholder": "uw@email.com",
+      "submitButton": "Magische link verzenden",
+      "checkEmail": "Controleer uw e-mail!",
+      "emailSentMessage": "We hebben een magische link naar {{email}} gestuurd. Klik op de link in de e-mail om in te loggen.",
+      "resendLink": "E-mail niet ontvangen?",
+      "resendButton": "Link opnieuw verzenden"
+    },
+    "verify": {
+      "verifying": "Uw login wordt geverifieerd...",
+      "success": "Inloggen geslaagd! Omleiden...",
+      "failed": "Verificatie mislukt",
+      "expired": "Deze link is verlopen. Vraag een nieuwe aan.",
+      "backToLogin": "Terug naar inloggen"
+    },
+    "errors": {
+      "emailRequired": "E-mailadres is verplicht",
+      "emailInvalid": "Voer een geldig e-mailadres in",
+      "unauthorized": "Dit e-mailadres is niet geautoriseerd om toegang te krijgen tot het systeem",
+      "emailFailed": "E-mail verzenden mislukt. Probeer het opnieuw.",
+      "tokenRequired": "Authenticatietoken is verplicht",
+      "tokenInvalid": "Ongeldig of verlopen token",
+      "serverError": "Serverfout. Probeer het later opnieuw.",
+      "sessionExpired": "Uw sessie is verlopen. Log opnieuw in."
+    },
+    "success": {
+      "magicLinkSent": "Magische link succesvol verzonden",
+      "loginSuccess": "Inloggen geslaagd",
+      "sessionValid": "Sessie is geldig"
     }
   }
 }

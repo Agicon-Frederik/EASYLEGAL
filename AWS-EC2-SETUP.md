@@ -169,26 +169,100 @@ npm run build:frontend
 
 ### Step 3.2: Configure Environment Variables
 
-Create a `.env` file in the project root:
+**Backend Environment Variables:**
+
+Create a `.env` file in the backend package:
 
 ```bash
-nano /home/ubuntu/easylegal/.env
+nano /home/ubuntu/easylegal/packages/backend/.env
 ```
 
 Add your configuration:
 
 ```env
-# Application
+# Server Configuration
 PORT=3000
+FRONTEND_URL=https://easylegal.online
 NODE_ENV=production
 
-# Add your environment variables
-# DATABASE_URL=postgresql://user:password@localhost:5432/easylegal
-# JWT_SECRET=your-secret-key
-# API_KEY=your-api-key
+# JWT Secret (IMPORTANT: Use a strong random key!)
+JWT_SECRET=your-very-secure-random-jwt-secret-change-this
+
+# Email Configuration
+EMAIL_HOST=smtp.purelymail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=your-email@your-domain.com
+EMAIL_PASS=your-email-password
 ```
 
-Save with `Ctrl+X`, then `Y`, then `Enter`.
+**Frontend Environment Variables:**
+
+Create a `.env` file in the frontend package:
+
+```bash
+nano /home/ubuntu/easylegal/packages/frontend/.env
+```
+
+Add your configuration:
+
+```env
+VITE_API_URL=https://api.easylegal.online
+```
+
+Save each file with `Ctrl+X`, then `Y`, then `Enter`.
+
+**Important Notes:**
+- The backend now uses `dotenv` to automatically load environment variables
+- Make sure to use strong, random values for `JWT_SECRET` in production
+- Update `FRONTEND_URL` to match your production frontend domain
+- Configure your email service (Gmail, Purelymail, SendGrid, etc.)
+- Never commit `.env` files to version control
+
+### Step 3.2b: Configure Authorized Users
+
+The authorized users are defined in the codebase and automatically seeded when the application starts.
+
+**Method 1: Update before deployment (Recommended)**
+
+Update the users in your local codebase before deploying:
+1. Edit `packages/backend/src/database/db.ts` locally
+2. Commit and push to GitHub
+3. GitHub Actions will deploy with the new users
+
+**Method 2: Update on the server**
+
+If you need to update users on the server directly:
+
+```bash
+nano /home/ubuntu/easylegal/packages/backend/src/database/db.ts
+```
+
+Find the `initializeUsers` method (around line 48) and update the authorized users:
+
+```typescript
+private async initializeUsers(): Promise<void> {
+  const authorizedUsers = [
+    { email: 'frederik@agicon.be', name: 'Frederik' },
+    { email: 'pascale@easylegal.be', name: 'Pascale' },
+  ];
+  // ...
+}
+```
+
+Save and rebuild:
+```bash
+npm run build:backend
+```
+
+**Important Notes:**
+- The database uses `INSERT OR IGNORE`, so existing users won't be duplicated
+- If you need to completely reset the database, delete it before restarting:
+  ```bash
+  rm -f /home/ubuntu/easylegal/packages/backend/data/easylegal.db
+  pm2 restart easylegal-backend
+  ```
+- The database will be automatically recreated with the users defined in the code
 
 ### Step 3.3: Start Backend with PM2
 

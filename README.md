@@ -85,6 +85,16 @@ Run these from the project root:
 | `npm run build:common` | Build common package only |
 | `npm test` | Run backend tests |
 
+## Authentication
+
+The application uses **magic link authentication** to restrict access to 2 authorized users. See [AUTHENTICATION.md](./AUTHENTICATION.md) for complete setup instructions.
+
+**Quick Setup:**
+1. Copy `.env.example` files to `.env` in both backend and frontend packages
+2. Configure email settings in `packages/backend/.env`
+3. Update authorized users in `packages/backend/src/database/db.ts`
+4. Rebuild and restart: `npm run build && npm run dev:backend`
+
 ## Internationalization (i18n)
 
 The application supports three languages:

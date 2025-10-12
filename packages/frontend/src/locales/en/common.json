@@ -28,15 +28,15 @@
   },
   "features": {
     "backend": {
-      "title": "Backend",
+      "title": "Feature1",
       "description": "Express.js API with TypeScript, Jest testing, and hot reload"
     },
     "frontend": {
-      "title": "Frontend",
+      "title": "Feature2",
       "description": "React 19 with Chakra UI v3 components and Vite for fast builds"
     },
     "common": {
-      "title": "Common",
+      "title": "Feature3",
       "description": "Shared utilities, types, and scripts across the monorepo"
     }
   },
@@ -46,8 +46,43 @@
       "count": "Count: {{count}}"
     },
     "monorepo": {
-      "title": "Welcome to Your Monorepo",
-      "description": "This is the frontend package of your EASYLEGAL monorepo, built with the latest Chakra UI components."
+      "title": "Welcome to Your EasyLegal",
+      "description": "This is the frontend  of your EASYLEGAL application, built with the latest Chakra UI components."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login to EASYLEGAL",
+      "subtitle": "Enter your email to receive a magic link",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "submitButton": "Send Magic Link",
+      "checkEmail": "Check your email!",
+      "emailSentMessage": "We've sent a magic link to {{email}}. Click the link in the email to log in.",
+      "resendLink": "Didn't receive the email?",
+      "resendButton": "Resend link"
+    },
+    "verify": {
+      "verifying": "Verifying your login...",
+      "success": "Login successful! Redirecting...",
+      "failed": "Verification failed",
+      "expired": "This link has expired. Please request a new one.",
+      "backToLogin": "Back to login"
+    },
+    "errors": {
+      "emailRequired": "Email address is required",
+      "emailInvalid": "Please enter a valid email address",
+      "unauthorized": "This email is not authorized to access the system",
+      "emailFailed": "Failed to send email. Please try again.",
+      "tokenRequired": "Authentication token is required",
+      "tokenInvalid": "Invalid or expired token",
+      "serverError": "Server error. Please try again later.",
+      "sessionExpired": "Your session has expired. Please log in again."
+    },
+    "success": {
+      "magicLinkSent": "Magic link sent successfully",
+      "loginSuccess": "Login successful",
+      "sessionValid": "Session is valid"
     }
   }
 }

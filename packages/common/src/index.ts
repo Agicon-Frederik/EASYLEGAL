@@ -16,3 +16,9 @@ export function formatDate(date: Date): string {
 
 // Export i18n utilities and configuration
 export * from './i18n';
+
+// Export email service
+export * from './email';
+
+// Export auth utilities
+export * from './auth';

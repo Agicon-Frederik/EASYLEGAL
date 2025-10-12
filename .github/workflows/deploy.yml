@@ -69,7 +69,11 @@ jobs:
             # Run backend tests
             npm run test:backend
 
+            # Remove old database to ensure fresh user data (optional - only if you want to reset)
+            # rm -f packages/backend/data/easylegal.db
+
             # Restart backend with PM2
+            # The database will be automatically initialized with authorized users on restart
             pm2 restart easylegal-backend || pm2 start packages/backend/dist/index.js --name easylegal-backend
 
             # Restart frontend with PM2 (if serving with a separate process)
