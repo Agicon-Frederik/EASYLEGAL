@@ -266,6 +266,8 @@ npm run build:backend
 
 ### Step 3.3: Start Backend with PM2
 
+**Important:** Only the backend runs with PM2. The frontend is served as static files by Nginx (configured in Part 5).
+
 ```bash
 cd /home/ubuntu/easylegal
 
@@ -279,6 +281,11 @@ pm2 save
 pm2 startup
 # Copy and run the command it provides
 ```
+
+**Note:** The frontend does NOT need PM2 because:
+- `npm run build:frontend` creates static HTML/CSS/JS files in `packages/frontend/dist/`
+- These files are served directly by Nginx (no Node.js process needed)
+- Nginx serves the frontend and proxies `/api` requests to the backend
 
 ### Step 3.4: Verify Backend is Running
 

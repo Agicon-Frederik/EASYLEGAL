@@ -1,13 +1,21 @@
-name: Test and Deploy to AWS EC2
+name: Deploy Backend to AWS EC2
+
+# NOTE: Frontend is deployed automatically by AWS Amplify on push to main
+# This workflow only handles backend deployment to EC2
 
 on:
   push:
     branches:
       - main
+    paths:
+      # Only trigger when backend or common packages change
+      - 'packages/backend/**'
+      - 'packages/common/**'
+      - '.github/workflows/**'
 
 jobs:
-  test-and-build:
-    name: Test and Build Monorepo
+  test-backend:
+    name: Test Backend
     runs-on: ubuntu-latest
 
     steps:
@@ -32,19 +40,16 @@ jobs:
       - name: Run backend tests
         run: npm run test:backend
 
-      - name: Build frontend
-        run: npm run build:frontend
-
-  deploy:
-    name: Deploy to EC2
-    needs: test-and-build
+  deploy-backend:
+    name: Deploy Backend to EC2
+    needs: test-backend
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to EC2
+      - name: Deploy Backend to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -58,13 +63,14 @@ jobs:
             # Pull latest code
             git pull origin main
 
-            # Install all dependencies
+            # Install dependencies
             npm install
 
-            # Build all packages
+            # Build common package (required by backend)
             npm run build:common
+
+            # Build backend
             npm run build:backend
-            npm run build:frontend
 
             # Run backend tests
             npm run test:backend
@@ -76,8 +82,8 @@ jobs:
             # The database will be automatically initialized with authorized users on restart
             pm2 restart easylegal-backend || pm2 start packages/backend/dist/index.js --name easylegal-backend
 
-            # Restart frontend with PM2 (if serving with a separate process)
-            # pm2 restart easylegal-frontend || pm2 start "npm run preview" --name easylegal-frontend --cwd packages/frontend
-
             # Save PM2 configuration
             pm2 save
+
+            # Show status
+            pm2 status

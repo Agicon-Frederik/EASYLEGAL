@@ -1,0 +1,40 @@
+version: 1
+# AWS Amplify Build Configuration for EASYLEGAL Frontend
+# This builds only the frontend package from the monorepo
+
+# Build environment
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Install dependencies for entire monorepo
+        - echo "Installing monorepo dependencies..."
+        - npm ci
+
+        # Build common package first (required by frontend)
+        - echo "Building common package..."
+        - npm run build:common
+
+    build:
+      commands:
+        # Build frontend
+        - echo "Building frontend..."
+        - npm run build:frontend
+
+    postBuild:
+      commands:
+        - echo "Frontend build completed successfully"
+
+  artifacts:
+    # Specify the frontend build output directory
+    baseDirectory: packages/frontend/dist
+    files:
+      - '**/*'
+
+  cache:
+    paths:
+      - node_modules/**/*
+      - packages/*/node_modules/**/*
+
+# Environment variables (set these in Amplify Console)
+# VITE_API_URL - Your backend API URL (e.g., https://api.easylegal.online)

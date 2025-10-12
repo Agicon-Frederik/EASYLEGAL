@@ -95,6 +95,39 @@ The application uses **magic link authentication** to restrict access to 2 autho
 3. Update authorized users in `packages/backend/src/database/db.ts`
 4. Rebuild and restart: `npm run build && npm run dev:backend`
 
+## Deployment
+
+### Deployment Options
+
+Choose the deployment strategy that best fits your needs:
+
+#### **Option 1: AWS Amplify + EC2 (Recommended for Production)**
+- **Frontend**: Deployed to AWS Amplify (auto-deploys on git push, global CDN, free SSL)
+- **Backend**: Deployed to EC2 with PM2
+- **Guide**: [AWS-AMPLIFY-SETUP.md](./AWS-AMPLIFY-SETUP.md)
+
+#### **Option 2: EC2 with Nginx Proxy Manager**
+- **Frontend**: Served by Nginx Proxy Manager as static files
+- **Backend**: Deployed to EC2 with PM2
+- **Guide**: [NGINX-PROXY-MANAGER-SETUP.md](./NGINX-PROXY-MANAGER-SETUP.md)
+
+#### **Option 3: EC2 with Traditional Nginx**
+- **Frontend**: Served by Nginx as static files
+- **Backend**: Deployed to EC2 with PM2
+- **Guide**: [AWS-EC2-SETUP.md](./AWS-EC2-SETUP.md)
+
+### Deployment Architecture
+
+**Amplify + EC2:**
+```
+GitHub Push → Amplify (Frontend) + GitHub Actions (Backend) → EC2
+```
+
+**Nginx Proxy Manager:**
+```
+GitHub Push → GitHub Actions → EC2 → Nginx Proxy Manager serves frontend
+```
+
 ## Internationalization (i18n)
 
 The application supports three languages:
