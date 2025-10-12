@@ -1,0 +1,53 @@
+{
+  "app": {
+    "name": "EASYLEGAL",
+    "tagline": "Uw juridische oplossing gemakkelijk gemaakt"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "Over ons",
+    "services": "Diensten",
+    "contact": "Contact"
+  },
+  "actions": {
+    "submit": "Indienen",
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "search": "Zoeken",
+    "reset": "Resetten",
+    "increment": "Verhogen"
+  },
+  "messages": {
+    "welcome": "Welkom bij {{appName}}",
+    "loading": "Laden...",
+    "error": "Er is een fout opgetreden",
+    "success": "Operatie succesvol voltooid",
+    "noData": "Geen gegevens beschikbaar"
+  },
+  "features": {
+    "backend": {
+      "title": "Backend",
+      "description": "Express.js API met TypeScript, Jest testing en hot reload"
+    },
+    "frontend": {
+      "title": "Frontend",
+      "description": "React 19 met Chakra UI v3 componenten en Vite voor snelle builds"
+    },
+    "common": {
+      "title": "Gemeenschappelijk",
+      "description": "Gedeelde utilities, types en scripts in de monorepo"
+    }
+  },
+  "demo": {
+    "counter": {
+      "title": "Teller voorbeeld",
+      "count": "Telling: {{count}}"
+    },
+    "monorepo": {
+      "title": "Welkom bij uw Monorepo",
+      "description": "Dit is het frontend pakket van uw EASYLEGAL monorepo, gebouwd met de nieuwste Chakra UI componenten."
+    }
+  }
+}

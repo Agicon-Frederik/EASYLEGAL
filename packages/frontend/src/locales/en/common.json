@@ -1,0 +1,53 @@
+{
+  "app": {
+    "name": "EASYLEGAL",
+    "tagline": "Your legal solution made easy"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "actions": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "reset": "Reset",
+    "increment": "Increment"
+  },
+  "messages": {
+    "welcome": "Welcome to {{appName}}",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation completed successfully",
+    "noData": "No data available"
+  },
+  "features": {
+    "backend": {
+      "title": "Backend",
+      "description": "Express.js API with TypeScript, Jest testing, and hot reload"
+    },
+    "frontend": {
+      "title": "Frontend",
+      "description": "React 19 with Chakra UI v3 components and Vite for fast builds"
+    },
+    "common": {
+      "title": "Common",
+      "description": "Shared utilities, types, and scripts across the monorepo"
+    }
+  },
+  "demo": {
+    "counter": {
+      "title": "Counter Example",
+      "count": "Count: {{count}}"
+    },
+    "monorepo": {
+      "title": "Welcome to Your Monorepo",
+      "description": "This is the frontend package of your EASYLEGAL monorepo, built with the latest Chakra UI components."
+    }
+  }
+}

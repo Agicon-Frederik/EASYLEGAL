@@ -4,7 +4,18 @@
       "Bash(dir:*)",
       "Bash(npm init:*)",
       "Bash(npm install:*)",
-      "Bash(npm test)"
+      "Bash(npm test)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(npm create:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm run build:common:*)",
+      "Bash(npm run build:backend:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm run build:frontend:*)",
+      "Bash(claude mcp add chakra-ui:*)",
+      "Bash(npm run build)",
+      "WebFetch(domain:easylegal.online)"
     ],
     "deny": [],
     "ask": []
