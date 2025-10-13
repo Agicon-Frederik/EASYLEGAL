@@ -13,6 +13,8 @@
     "@chakra-ui/react": "^3.27.1",
     "@easylegal/common": "^1.0.0",
     "@emotion/react": "^11.14.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-i18next": "^16.0.0",

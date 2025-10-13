@@ -42,6 +42,16 @@ export function Home() {
             </Heading>
 
             <HStack gap={4}>
+              {/* Navigation */}
+              <Button
+                size="sm"
+                variant="ghost"
+                colorPalette="brand"
+                onClick={() => navigate('/chatbot')}
+              >
+                Legal Chat
+              </Button>
+
               {/* User Info */}
               <Text fontSize="sm" color="gray.600">
                 {user?.name} ({user?.email})
