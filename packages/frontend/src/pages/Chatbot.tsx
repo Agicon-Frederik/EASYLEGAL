@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Box, Grid, GridItem, Button, Input, VStack, HStack, Text, Heading, Card, IconButton } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Button, Input, VStack, HStack, Text, Heading, Card } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -13,7 +12,6 @@ interface Message {
 }
 
 export function Chatbot() {
-  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -286,11 +284,6 @@ export function Chatbot() {
                 <Box
                   ref={previewRef}
                   dangerouslySetInnerHTML={{ __html: generateHTMLPreview() }}
-                  sx={{
-                    '& body': {
-                      padding: '20px',
-                    },
-                  }}
                 />
               </Card.Body>
             </Card.Root>
