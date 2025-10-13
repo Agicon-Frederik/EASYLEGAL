@@ -192,36 +192,37 @@ export function Chatbot() {
 
   return (
     <Box minH="100vh" bg="bg.canvas" p={4}>
-      <VStack gap={4} align="stretch" h="calc(100vh - 32px)">
-        {/* Header */}
-        <HStack justify="space-between" align="center">
-          <HStack>
+      <Box maxW="container.2xl" mx="auto">
+        <VStack gap={4} align="stretch" h="calc(100vh - 32px)">
+          {/* Header */}
+          <HStack justify="space-between" align="center">
+            <HStack>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => navigate('/')}
+              >
+                ← Back
+              </Button>
+              <Heading size="lg">Legal Document Chat</Heading>
+            </HStack>
             <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => navigate('/')}
+              colorPalette="brand"
+              onClick={generatePDF}
+              loading={isGeneratingPdf}
+              disabled={messages.length <= 1}
             >
-              ← Back
+              Generate PDF
             </Button>
-            <Heading size="lg">Legal Document Chat</Heading>
           </HStack>
-          <Button
-            colorPalette="brand"
-            onClick={generatePDF}
-            loading={isGeneratingPdf}
-            disabled={messages.length <= 1}
-          >
-            Generate PDF
-          </Button>
-        </HStack>
 
-        {/* Split Layout */}
-        <Grid
-          templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
-          gap={4}
-          flex="1"
-          h="full"
-        >
+          {/* Split Layout */}
+          <Grid
+            templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
+            gap={6}
+            flex="1"
+            h="full"
+          >
           {/* Left: Chat Interface */}
           <GridItem>
             <Card.Root h="full" display="flex" flexDirection="column">
@@ -288,8 +289,9 @@ export function Chatbot() {
               </Card.Body>
             </Card.Root>
           </GridItem>
-        </Grid>
-      </VStack>
+          </Grid>
+        </VStack>
+      </Box>
     </Box>
   );
 }
