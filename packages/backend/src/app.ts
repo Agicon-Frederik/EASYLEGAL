@@ -8,24 +8,10 @@ import authRoutes from './routes/auth';
 const app = express();
 
 // Enable CORS for frontend
-// Support multiple origins (localhost for dev, production domain)
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://easylegal.agicon.cloud',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
+// TEMPORARY: Allow all origins for testing
+// TODO: Restrict to specific origins in production
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins
   credentials: true,
 }));
 
