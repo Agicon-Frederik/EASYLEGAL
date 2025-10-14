@@ -63,7 +63,10 @@ async function initializeServices() {
   }
 }
 
-initializeServices();
+// Only initialize services if not in test mode
+if (process.env.NODE_ENV !== 'test') {
+  initializeServices();
+}
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {

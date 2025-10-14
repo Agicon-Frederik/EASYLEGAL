@@ -9,4 +9,5 @@ module.exports = {
     '!src/**/*.test.ts',
     '!src/**/*.spec.ts',
   ],
+  setupFiles: ['<rootDir>/jest.setup.js'],
 };
