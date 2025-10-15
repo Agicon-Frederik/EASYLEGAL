@@ -4,15 +4,15 @@
   "description": "EASYLEGAL Backend API",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon --exec npx ts-node src/index.ts",
-    "build": "npx prisma generate --skip-seed && npx tsc",
+    "dev": "node ../../node_modules/.bin/nodemon --exec node ../../node_modules/.bin/ts-node src/index.ts",
+    "build": "node ../../node_modules/.bin/prisma generate && node ../../node_modules/.bin/tsc",
     "start": "node dist/index.js",
-    "test": "npx jest",
-    "test:watch": "npx jest --watch",
-    "test:coverage": "npx jest --coverage",
-    "prisma:generate": "npx prisma generate",
-    "prisma:push": "npx prisma db push",
-    "prisma:studio": "npx prisma studio"
+    "test": "node ../../node_modules/.bin/jest",
+    "test:watch": "node ../../node_modules/.bin/jest --watch",
+    "test:coverage": "node ../../node_modules/.bin/jest --coverage",
+    "prisma:generate": "node ../../node_modules/.bin/prisma generate",
+    "prisma:push": "node ../../node_modules/.bin/prisma db push",
+    "prisma:studio": "node ../../node_modules/.bin/prisma studio"
   },
   "keywords": [],
   "author": "",

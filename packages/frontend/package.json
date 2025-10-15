@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npx vite",
-    "build": "npx tsc -b && npx vite build",
-    "lint": "npx eslint .",
-    "preview": "npx vite preview"
+    "dev": "node ../../node_modules/.bin/vite",
+    "build": "node ../../node_modules/.bin/tsc -b && node ../../node_modules/.bin/vite build",
+    "lint": "node ../../node_modules/.bin/eslint .",
+    "preview": "node ../../node_modules/.bin/vite preview"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.27.1",
