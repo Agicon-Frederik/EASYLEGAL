@@ -37,7 +37,8 @@
       "Bash(curl:*)",
       "Bash(taskkill:*)",
       "Bash(netstat:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "WebFetch(domain:easylegal-api.agicon.cloud)"
     ],
     "deny": [],
     "ask": []

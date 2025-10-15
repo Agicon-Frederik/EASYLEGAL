@@ -263,3 +263,113 @@ pm2 monit
 View recent deployments:
 - Go to GitHub → Actions tab
 - Click on any workflow run to see detailed logs
+
+---
+
+## Quick EC2 Deployment (New Method)
+
+For the easiest deployment experience, we now provide an automated deployment script:
+
+### Automated Deployment
+
+```bash
+cd ~/easylegal
+npm run deploy:ec2
+```
+
+This single command will:
+- Pull latest code from git
+- Install dependencies with automatic permission fixes
+- Build all packages (including Prisma Client generation)
+- Verify the build was successful
+- Check environment configuration
+
+After the script completes, restart your service:
+```bash
+sudo systemctl restart easylegal-backend  # or use pm2 if using PM2
+```
+
+### Common EC2 Issues and Fixes
+
+#### Issue: "Permission denied" errors during build
+
+**Symptom:** Build fails with `sh: 1: tsc: Permission denied`
+
+**Fix:**
+```bash
+npm run fix-permissions
+npm run build
+```
+
+#### Issue: API returns 500 errors or "Server error. Please try again later."
+
+**Symptoms:**
+- `/api/admin/users` returns `{"success": false, "message": "Server error. Please try again later."}`
+- All database operations fail
+
+**Root Cause:** Prisma Client was not generated successfully due to build failures
+
+**Fix:**
+```bash
+# Verify Prisma Client exists
+ls -la node_modules/@prisma/client
+
+# If not found, run the full deployment process
+npm run deploy:ec2
+
+# Or manually fix and build
+npm run fix-permissions
+npm run build
+
+# Then restart your service
+sudo systemctl restart easylegal-backend
+```
+
+#### Issue: Environment variables not loaded
+
+**Fix:** Ensure `.env` file exists in `packages/backend/.env` with required variables:
+```env
+PORT=3000
+FRONTEND_URL=https://easylegal.agicon.cloud
+JWT_SECRET=your-secret-key
+DATABASE_URL=file:./dev.db
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+```
+
+### Quick Health Checks
+
+Test if the API is working:
+
+```bash
+# Health check
+curl http://localhost:3000/api/health
+# Expected: "The API is running"
+
+# Users endpoint
+curl http://localhost:3000/api/admin/users
+# Expected: {"success":true,"data":[...]}
+```
+
+### Service Management Commands
+
+If using systemd service:
+```bash
+sudo systemctl start easylegal-backend
+sudo systemctl stop easylegal-backend
+sudo systemctl restart easylegal-backend
+sudo systemctl status easylegal-backend
+sudo journalctl -u easylegal-backend -f
+```
+
+If using PM2:
+```bash
+pm2 start packages/backend/dist/index.js --name easylegal-backend
+pm2 stop easylegal-backend
+pm2 restart easylegal-backend
+pm2 logs easylegal-backend
+pm2 status
+```

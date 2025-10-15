@@ -19,7 +19,8 @@
     "test:backend": "npm run test --workspace=@easylegal/backend",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
     "install:all": "npm install",
-    "fix-permissions": "bash packages/common/scripts/fix-permissions.sh"
+    "fix-permissions": "bash packages/common/scripts/fix-permissions.sh",
+    "deploy:ec2": "bash packages/common/scripts/deploy-ec2.sh"
   },
   "keywords": [],
   "author": "",
