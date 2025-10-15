@@ -76,8 +76,12 @@
       "emailFailed": "Failed to send email. Please try again.",
       "tokenRequired": "Authentication token is required",
       "tokenInvalid": "Invalid or expired token",
+      "tokenExpired": "Your login link has expired. Please request a new one.",
       "serverError": "Server error. Please try again later.",
-      "sessionExpired": "Your session has expired. Please log in again."
+      "sessionExpired": "Your session has expired. Please log in again.",
+      "databaseError": "Database error. Please contact support if this persists.",
+      "emailServiceNotConfigured": "Email service is not configured. Please contact support.",
+      "tokenGenerationFailed": "Failed to generate authentication token. Please try again."
     },
     "success": {
       "magicLinkSent": "Magic link sent successfully",

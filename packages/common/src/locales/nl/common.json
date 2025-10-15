@@ -76,8 +76,12 @@
       "emailFailed": "E-mail verzenden mislukt. Probeer het opnieuw.",
       "tokenRequired": "Authenticatietoken is verplicht",
       "tokenInvalid": "Ongeldig of verlopen token",
+      "tokenExpired": "Uw inloglink is verlopen. Vraag een nieuwe aan.",
       "serverError": "Serverfout. Probeer het later opnieuw.",
-      "sessionExpired": "Uw sessie is verlopen. Log opnieuw in."
+      "sessionExpired": "Uw sessie is verlopen. Log opnieuw in.",
+      "databaseError": "Databasefout. Neem contact op met support als dit aanhoudt.",
+      "emailServiceNotConfigured": "E-mailservice is niet geconfigureerd. Neem contact op met support.",
+      "tokenGenerationFailed": "Genereren van authenticatietoken mislukt. Probeer het opnieuw."
     },
     "success": {
       "magicLinkSent": "Magische link succesvol verzonden",

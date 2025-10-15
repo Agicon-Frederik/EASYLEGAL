@@ -76,8 +76,12 @@
       "emailFailed": "Échec de l'envoi de l'email. Veuillez réessayer.",
       "tokenRequired": "Le jeton d'authentification est requis",
       "tokenInvalid": "Jeton invalide ou expiré",
+      "tokenExpired": "Votre lien de connexion a expiré. Veuillez en demander un nouveau.",
       "serverError": "Erreur du serveur. Veuillez réessayer plus tard.",
-      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter."
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+      "databaseError": "Erreur de base de données. Veuillez contacter le support si cela persiste.",
+      "emailServiceNotConfigured": "Le service d'e-mail n'est pas configuré. Veuillez contacter le support.",
+      "tokenGenerationFailed": "Échec de la génération du jeton d'authentification. Veuillez réessayer."
     },
     "success": {
       "magicLinkSent": "Lien magique envoyé avec succès",

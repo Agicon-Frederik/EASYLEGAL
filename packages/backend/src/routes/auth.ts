@@ -64,12 +64,42 @@ router.post('/request-magic-link', async (req: Request, res: Response) => {
     };
     return res.json(response);
   } catch (error) {
-    console.error('Error requesting magic link:', error);
+    // Log detailed error information for debugging
+    const requestEmail = req.body.email;
+    console.error('Error requesting magic link:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      email: requestEmail ? requestEmail.toLowerCase() : 'not provided',
+      timestamp: new Date().toISOString(),
+    });
+
+    // Provide more specific error messages
+    let errorMessage = req.t('auth.errors.serverError');
+    let statusCode = 500;
+
+    if (error instanceof Error) {
+      // Database errors
+      if (error.message.includes('Database not initialized')) {
+        errorMessage = req.t('auth.errors.databaseError');
+        console.error('CRITICAL: Database not initialized when attempting to request magic link');
+      }
+      // Email service errors
+      else if (error.message.includes('Email service not initialized')) {
+        errorMessage = req.t('auth.errors.emailServiceNotConfigured');
+        console.error('CRITICAL: Email service not initialized. Check SMTP configuration.');
+      }
+      // JWT errors
+      else if (error.message.includes('jwt') || error.message.includes('token')) {
+        errorMessage = req.t('auth.errors.tokenGenerationFailed');
+        console.error('CRITICAL: Failed to generate JWT token');
+      }
+    }
+
     const response: AuthResponse = {
       success: false,
-      message: req.t('auth.errors.serverError'),
+      message: errorMessage,
     };
-    return res.status(500).json(response);
+    return res.status(statusCode).json(response);
   }
 });
 
@@ -125,12 +155,40 @@ router.post('/verify-token', async (req: Request, res: Response) => {
     };
     return res.json(response);
   } catch (error) {
-    console.error('Error verifying token:', error);
+    // Log detailed error information for debugging
+    const requestToken = req.body.token;
+    console.error('Error verifying token:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      hasToken: !!requestToken,
+      timestamp: new Date().toISOString(),
+    });
+
+    // Provide more specific error messages
+    let errorMessage = req.t('auth.errors.serverError');
+    let statusCode = 500;
+
+    if (error instanceof Error) {
+      // JWT verification errors
+      if (error.message.includes('jwt expired')) {
+        errorMessage = req.t('auth.errors.tokenExpired');
+        statusCode = 401;
+      } else if (error.message.includes('jwt malformed') || error.message.includes('invalid signature')) {
+        errorMessage = req.t('auth.errors.tokenInvalid');
+        statusCode = 401;
+      }
+      // Database errors
+      else if (error.message.includes('Database not initialized')) {
+        errorMessage = req.t('auth.errors.databaseError');
+        console.error('CRITICAL: Database not initialized when attempting to verify token');
+      }
+    }
+
     const response: AuthResponse = {
       success: false,
-      message: req.t('auth.errors.serverError'),
+      message: errorMessage,
     };
-    return res.status(500).json(response);
+    return res.status(statusCode).json(response);
   }
 });
 
@@ -171,12 +229,34 @@ router.get('/verify-session', (req: Request, res: Response) => {
     };
     return res.json(response);
   } catch (error) {
-    console.error('Error verifying session:', error);
+    // Log detailed error information for debugging
+    console.error('Error verifying session:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      hasAuthHeader: !!req.headers.authorization,
+      timestamp: new Date().toISOString(),
+    });
+
+    // Provide more specific error messages
+    let errorMessage = req.t('auth.errors.serverError');
+    let statusCode = 500;
+
+    if (error instanceof Error) {
+      // JWT verification errors
+      if (error.message.includes('jwt expired')) {
+        errorMessage = req.t('auth.errors.tokenExpired');
+        statusCode = 401;
+      } else if (error.message.includes('jwt malformed') || error.message.includes('invalid signature')) {
+        errorMessage = req.t('auth.errors.tokenInvalid');
+        statusCode = 401;
+      }
+    }
+
     const response: AuthResponse = {
       success: false,
-      message: req.t('auth.errors.serverError'),
+      message: errorMessage,
     };
-    return res.status(500).json(response);
+    return res.status(statusCode).json(response);
   }
 });
 
