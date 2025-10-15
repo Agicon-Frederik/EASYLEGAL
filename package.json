@@ -7,6 +7,7 @@
     "packages/*"
   ],
   "scripts": {
+    "postinstall": "node packages/common/scripts/postinstall.js",
     "dev": "npm run dev --workspace=@easylegal/backend",
     "dev:frontend": "npm run dev --workspace=@easylegal/frontend",
     "dev:backend": "npm run dev --workspace=@easylegal/backend",
@@ -17,7 +18,8 @@
     "test": "npm run test --workspace=@easylegal/backend",
     "test:backend": "npm run test --workspace=@easylegal/backend",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
-    "install:all": "npm install"
+    "install:all": "npm install",
+    "fix-permissions": "bash packages/common/scripts/fix-permissions.sh"
   },
   "keywords": [],
   "author": "",
