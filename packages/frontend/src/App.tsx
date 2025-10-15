@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Verify } from './pages/Verify';
 import { Chatbot } from './pages/Chatbot';
+import { Admin } from './pages/Admin';
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Chatbot />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
               </ProtectedRoute>
             }
           />

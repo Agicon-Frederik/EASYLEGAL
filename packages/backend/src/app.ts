@@ -2,8 +2,10 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import i18next, { i18nextMiddleware } from "./i18n";
 import { database } from "./database/db";
+import { prisma, initializeDefaultUsers } from "./database/prisma";
 import { emailService } from "@easylegal/common";
 import authRoutes from "./routes/auth";
+import adminRoutes from "./routes/admin";
 
 const app = express();
 
@@ -39,9 +41,13 @@ app.use(i18nextMiddleware);
 // Initialize services
 async function initializeServices() {
   try {
-    // Initialize database
+    // Initialize old database (keeping for backward compatibility with auth routes)
     await database.initialize();
-    console.log("✓ Database initialized");
+    console.log("✓ Legacy database initialized");
+
+    // Initialize Prisma and seed default users
+    await initializeDefaultUsers();
+    console.log("✓ Prisma database initialized with default users");
 
     // Initialize email service
     const emailConfig = {
@@ -85,5 +91,8 @@ app.get("/api/welcome", (req: Request, res: Response) => {
 
 // Auth routes
 app.use("/api/auth", authRoutes);
+
+// Admin routes
+app.use("/api/admin", adminRoutes);
 
 export default app;

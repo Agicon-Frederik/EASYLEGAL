@@ -27,7 +27,17 @@
       "Bash(npm test:*)",
       "Bash(curl -I -X OPTIONS https://easylegal-api.agicon.cloud/api/auth/request-magic-link -H \"Origin: https://easylegal.agicon.cloud\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: Content-Type\")",
       "Bash(curl -v -X OPTIONS http://localhost:3000/api/auth/request-magic-link -H \"Origin: https://easylegal.agicon.cloud\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: Content-Type\")",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(npx prisma init:*)",
+      "Bash(npx prisma:*)",
+      "Bash(curl http://localhost:3000/api/admin/users)",
+      "Bash(npm run dev)",
+      "Bash(npx tsc:*)",
+      "Bash(node:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

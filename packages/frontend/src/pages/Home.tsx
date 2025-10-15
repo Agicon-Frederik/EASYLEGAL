@@ -57,6 +57,14 @@ export function Home() {
               >
                 Legal Chat
               </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                colorPalette="brand"
+                onClick={() => navigate("/admin")}
+              >
+                Admin
+              </Button>
 
               {/* User Info */}
               <Text fontSize="sm" color="gray.600">
