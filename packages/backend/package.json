@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon --exec npx ts-node src/index.ts",
-    "build": "npx prisma generate && npx tsc",
+    "build": "npx prisma generate --skip-seed && npx tsc",
     "start": "node dist/index.js",
     "test": "npx jest",
     "test:watch": "npx jest --watch",
