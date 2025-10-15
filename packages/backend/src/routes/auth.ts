@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { database } from '../database/db';
+import { prisma } from '../database/prisma';
 import { JWTUtils, emailService, type AuthResponse } from '@easylegal/common';
 
 const router = express.Router();
@@ -27,8 +27,10 @@ router.post('/request-magic-link', async (req: Request, res: Response) => {
       return res.status(400).json(response);
     }
 
-    // Check if user is authorized
-    const user = await database.getUserByEmail(email.toLowerCase());
+    // Check if user is authorized (using Prisma)
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+    });
 
     if (!user) {
       const response: AuthResponse = {
@@ -130,10 +132,12 @@ router.post('/verify-token', async (req: Request, res: Response) => {
       return res.status(401).json(response);
     }
 
-    // Double-check user is still authorized
-    const isAuthorized = await database.isAuthorized(payload.email);
+    // Double-check user is still authorized (using Prisma)
+    const user = await prisma.user.findUnique({
+      where: { email: payload.email },
+    });
 
-    if (!isAuthorized) {
+    if (!user) {
       const response: AuthResponse = {
         success: false,
         message: req.t('auth.errors.unauthorized'),
