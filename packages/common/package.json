@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "node ../../node_modules/.bin/tsc && npm run copy-locales",
+    "build": "npm exec tsc && npm run copy-locales",
     "copy-locales": "node -e \"require('fs').cpSync('src/locales', 'dist/locales', {recursive: true})\"",
-    "dev": "node ../../node_modules/.bin/tsc --watch"
+    "dev": "npm exec tsc -- --watch"
   },
   "keywords": [],
   "author": "",
