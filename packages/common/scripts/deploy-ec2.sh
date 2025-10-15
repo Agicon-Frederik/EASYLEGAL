@@ -94,14 +94,31 @@ ENV_FILE="$ROOT_DIR/packages/backend/.env"
 if [ -f "$ENV_FILE" ]; then
     print_success "Environment file found"
 
-    # Check critical variables
-    if grep -q "JWT_SECRET=" "$ENV_FILE" && \
-       grep -q "DATABASE_URL=" "$ENV_FILE" && \
-       grep -q "FRONTEND_URL=" "$ENV_FILE"; then
+    # Function to check if env var has a value (not empty, not commented)
+    check_env_var() {
+        local var_name=$1
+        # Check if variable exists and has a non-empty value after the =
+        if grep -q "^${var_name}=.\+" "$ENV_FILE"; then
+            return 0
+        else
+            return 1
+        fi
+    }
+
+    # Check critical variables have actual values
+    missing_vars=()
+    check_env_var "JWT_SECRET" || missing_vars+=("JWT_SECRET")
+    check_env_var "DATABASE_URL" || missing_vars+=("DATABASE_URL")
+    check_env_var "FRONTEND_URL" || missing_vars+=("FRONTEND_URL")
+
+    if [ ${#missing_vars[@]} -eq 0 ]; then
         print_success "Critical environment variables present"
     else
-        print_error "Missing critical environment variables!"
-        echo "Please ensure JWT_SECRET, DATABASE_URL, and FRONTEND_URL are set"
+        print_error "Missing or empty critical environment variables!"
+        echo "The following variables need to be set in $ENV_FILE:"
+        for var in "${missing_vars[@]}"; do
+            echo "  - $var"
+        done
         exit 1
     fi
 else
