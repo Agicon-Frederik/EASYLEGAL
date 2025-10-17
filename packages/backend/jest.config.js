@@ -10,4 +10,6 @@ module.exports = {
     '!src/**/*.spec.ts',
   ],
   setupFiles: ['<rootDir>/jest.setup.js'],
+  // Run tests sequentially to avoid database locking issues
+  maxWorkers: 1,
 };
