@@ -3,8 +3,11 @@ import cors from "cors";
 import i18next, { i18nextMiddleware } from "./i18n";
 import { prisma, initializeDefaultUsers } from "./database/prisma";
 import { emailService } from "@easylegal/common";
+import { openAIService } from "./services/openai";
+import { manualFlowService } from "./services/manualFlow";
 import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
+import conversationRoutes from "./routes/conversation";
 
 const app = express();
 
@@ -12,6 +15,7 @@ const app = express();
 // Support multiple origins (localhost for dev, production domain)
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:5174",
   "https://easylegal.agicon.cloud",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
@@ -63,6 +67,19 @@ async function initializeServices() {
         "⚠ Email service not configured. Set EMAIL_USER and EMAIL_PASS environment variables."
       );
     }
+
+    // Initialize OpenAI service
+    const openaiApiKey = process.env.OPENAI_API_KEY || "";
+    if (openaiApiKey) {
+      openAIService.initialize(openaiApiKey);
+    } else {
+      console.warn(
+        "⚠ OpenAI API key not configured. Conversations will use fallback responses. Set OPENAI_API_KEY environment variable."
+      );
+    }
+
+    // Initialize manual flow service
+    manualFlowService.initialize();
   } catch (error) {
     console.error("Failed to initialize services:", error);
   }
@@ -89,5 +106,8 @@ app.use("/api/auth", authRoutes);
 
 // Admin routes
 app.use("/api/admin", adminRoutes);
+
+// Conversation routes
+app.use("/api/conversation", conversationRoutes);
 
 export default app;

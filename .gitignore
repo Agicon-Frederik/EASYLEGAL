@@ -40,3 +40,19 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+# Claude local settings
+.claude/settings.local.json
+
+# Database files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Test output files
+test-output.txt
+**/test-output.txt
+
+# Windows null device file
+nul

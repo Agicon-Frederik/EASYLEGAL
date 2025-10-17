@@ -1,0 +1,153 @@
+# Manual conversation flow for legal consultation
+# Each question has an ID, text, and conditional routing based on answers
+
+questions:
+  - id: 1
+    text: "Hello {userName}! Welcome to EASYLEGAL. What type of legal matter do you need help with today? Please choose: (A) Contract dispute, (B) Employment issue, (C) Real estate matter, (D) Other"
+    routes:
+      - answer_contains: "A"
+        next_question: 2
+      - answer_contains: "contract"
+        next_question: 2
+      - answer_contains: "B"
+        next_question: 5
+      - answer_contains: "employment"
+        next_question: 5
+      - answer_contains: "C"
+        next_question: 8
+      - answer_contains: "real estate"
+        next_question: 8
+      - answer_contains: "D"
+        next_question: 11
+      - answer_contains: "other"
+        next_question: 11
+      - default: true
+        next_question: 11
+
+  # Contract dispute path
+  - id: 2
+    text: "I understand you have a contract dispute. Is this a written contract or a verbal agreement? (A) Written, (B) Verbal"
+    routes:
+      - answer_contains: "A"
+        next_question: 3
+      - answer_contains: "written"
+        next_question: 3
+      - answer_contains: "B"
+        next_question: 4
+      - answer_contains: "verbal"
+        next_question: 4
+      - default: true
+        next_question: 3
+
+  - id: 3
+    text: "Do you have a copy of the written contract available? (A) Yes, (B) No"
+    routes:
+      - answer_contains: "A"
+        next_question: 12
+      - answer_contains: "yes"
+        next_question: 12
+      - default: true
+        next_question: 12
+
+  - id: 4
+    text: "For verbal agreements, do you have any witnesses or written communication (emails, texts) that can support your case? Please describe briefly."
+    routes:
+      - default: true
+        next_question: 12
+
+  # Employment issue path
+  - id: 5
+    text: "I see you're dealing with an employment issue. Which category best describes your situation? (A) Wrongful termination, (B) Discrimination or harassment, (C) Wage dispute, (D) Other"
+    routes:
+      - answer_contains: "A"
+        next_question: 6
+      - answer_contains: "termination"
+        next_question: 6
+      - answer_contains: "B"
+        next_question: 7
+      - answer_contains: "discrimination"
+        next_question: 7
+      - answer_contains: "harassment"
+        next_question: 7
+      - answer_contains: "C"
+        next_question: 7
+      - answer_contains: "wage"
+        next_question: 7
+      - default: true
+        next_question: 7
+
+  - id: 6
+    text: "How long were you employed with this company, and when did the termination occur?"
+    routes:
+      - default: true
+        next_question: 12
+
+  - id: 7
+    text: "Have you documented these incidents? If so, what kind of documentation do you have? (emails, witness statements, etc.)"
+    routes:
+      - default: true
+        next_question: 12
+
+  # Real estate path
+  - id: 8
+    text: "You mentioned a real estate matter. Is this related to: (A) Buying/selling property, (B) Landlord-tenant issue, (C) Property dispute, (D) Other"
+    routes:
+      - answer_contains: "A"
+        next_question: 9
+      - answer_contains: "buy"
+        next_question: 9
+      - answer_contains: "sell"
+        next_question: 9
+      - answer_contains: "B"
+        next_question: 10
+      - answer_contains: "landlord"
+        next_question: 10
+      - answer_contains: "tenant"
+        next_question: 10
+      - answer_contains: "rent"
+        next_question: 10
+      - default: true
+        next_question: 12
+
+  - id: 9
+    text: "What stage is the transaction at? Have you signed any agreements or made any deposits?"
+    routes:
+      - default: true
+        next_question: 12
+
+  - id: 10
+    text: "Is there a written lease agreement? If so, have you reviewed the specific clause related to your issue?"
+    routes:
+      - default: true
+        next_question: 12
+
+  # Other / General path
+  - id: 11
+    text: "Please describe your legal matter in as much detail as possible. What specific issue are you facing?"
+    routes:
+      - default: true
+        next_question: 12
+
+  # Final questions
+  - id: 12
+    text: "When did this issue begin? Please provide a timeline of key events."
+    routes:
+      - default: true
+        next_question: 13
+
+  - id: 13
+    text: "Have you taken any action so far to resolve this matter? If so, what steps have you taken?"
+    routes:
+      - default: true
+        next_question: 14
+
+  - id: 14
+    text: "Is there anything else you'd like to add that might be relevant to your case?"
+    routes:
+      - default: true
+        next_question: END
+
+# Configuration
+config:
+  start_question: 1
+  end_marker: END
