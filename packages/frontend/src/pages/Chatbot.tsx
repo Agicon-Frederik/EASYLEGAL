@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid, GridItem, Button, Input, VStack, HStack, Text, Heading, Card } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Button, Input, VStack, HStack, Text, Heading, Card, Select } from '@chakra-ui/react';
+import { createListCollection } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -11,43 +12,124 @@ interface Message {
   timestamp: Date;
 }
 
+type ConversationMode = 'openai' | 'manual';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+const modeOptions = createListCollection({
+  items: [
+    { label: 'OpenAI (AI-Powered)', value: 'openai' },
+    { label: 'Manual Flow (Predefined Questions)', value: 'manual' },
+  ],
+});
+
 export function Chatbot() {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'assistant',
-      content: 'Hello! I\'m here to help you create legal documents. What would you like to create today?',
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [conversationId, setConversationId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [conversationComplete, setConversationComplete] = useState(false);
+  const [conversationMode, setConversationMode] = useState<ConversationMode>('openai');
   const previewRef = useRef<HTMLDivElement>(null);
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return;
+  // Don't start conversation on mount - wait for user to select mode and click start
+  // useEffect(() => {
+  //   startConversation();
+  // }, []);
 
-    const newMessage: Message = {
+  // Start a new conversation
+  const startConversation = async () => {
+    setIsLoading(true);
+    setMessages([]);
+    setConversationComplete(false);
+    try {
+      // Get user from session (for now, we'll use user ID 1)
+      // TODO: Get actual user ID from auth context
+      const userId = 1;
+
+      const response = await fetch(`${API_URL}/api/conversation/start`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, mode: conversationMode }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setConversationId(data.data.conversationId);
+        setMessages([{
+          id: data.data.messageId.toString(),
+          role: 'assistant',
+          content: data.data.question,
+          timestamp: new Date(),
+        }]);
+      } else {
+        console.error('Failed to start conversation:', data.message);
+        alert('Failed to start conversation. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error starting conversation:', error);
+      alert('Error connecting to server. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Send user message and get next question
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || !conversationId || isLoading || conversationComplete) return;
+
+    const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
       content: inputValue,
       timestamp: new Date(),
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
+    setIsLoading(true);
 
-    // Simulate assistant response (replace with actual API call later)
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: `I understand you said: "${inputValue}". This is a demo response. In production, this would connect to your backend API.`,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-    }, 500);
+    try {
+      const response = await fetch(`${API_URL}/api/conversation/message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversationId,
+          message: inputValue,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        const assistantMessage: Message = {
+          id: data.data.messageId.toString(),
+          role: 'assistant',
+          content: data.data.question,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+
+        if (data.data.completed) {
+          setConversationComplete(true);
+        }
+      } else {
+        console.error('Failed to send message:', data.message);
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Error connecting to server. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -192,44 +274,80 @@ export function Chatbot() {
 
   return (
     <Box minH="100vh" bg="bg.canvas" p={4}>
-      <Box maxW="container.2xl" mx="auto">
+      <Box maxW="95%" mx="auto">
         <VStack gap={4} align="stretch" h="calc(100vh - 32px)">
           {/* Header */}
-          <HStack justify="space-between" align="center">
-            <HStack>
+          <VStack gap={3} align="stretch">
+            <HStack justify="space-between" align="center">
+              <HStack>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => navigate('/')}
+                >
+                  ← Back
+                </Button>
+                <Heading size="lg">Legal Document Chat</Heading>
+              </HStack>
               <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => navigate('/')}
+                colorPalette="brand"
+                onClick={generatePDF}
+                loading={isGeneratingPdf}
+                disabled={messages.length <= 1}
               >
-                ← Back
+                Generate PDF
               </Button>
-              <Heading size="lg">Legal Document Chat</Heading>
             </HStack>
-            <Button
-              colorPalette="brand"
-              onClick={generatePDF}
-              loading={isGeneratingPdf}
-              disabled={messages.length <= 1}
-            >
-              Generate PDF
-            </Button>
-          </HStack>
+
+            {/* Mode Selector */}
+            {!conversationId && (
+              <HStack gap={3} bg="gray.50" p={4} borderRadius="md">
+                <Text fontWeight="medium" minW="120px">Conversation Mode:</Text>
+                <Select.Root
+                  collection={modeOptions}
+                  value={[conversationMode]}
+                  onValueChange={(e) => setConversationMode(e.value[0] as ConversationMode)}
+                  size="sm"
+                  width="300px"
+                  disabled={isLoading}
+                >
+                  <Select.Trigger>
+                    <Select.ValueText placeholder="Select mode" />
+                  </Select.Trigger>
+                  <Select.Content>
+                    {modeOptions.items.map((option) => (
+                      <Select.Item key={option.value} item={option}>
+                        {option.label}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
+                <Button
+                  colorPalette="brand"
+                  onClick={startConversation}
+                  loading={isLoading}
+                  size="sm"
+                >
+                  Start Conversation
+                </Button>
+              </HStack>
+            )}
+          </VStack>
 
           {/* Split Layout */}
           <Grid
             templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
-            gap={6}
+            gap={3}
             flex="1"
             h="full"
           >
           {/* Left: Chat Interface */}
           <GridItem>
-            <Card.Root h="full" display="flex" flexDirection="column">
-              <Card.Header>
+            <Card.Root h="full" display="flex" flexDirection="column" bg="blue.50">
+              <Card.Header bg="blue.100">
                 <Heading size="md">Conversation</Heading>
               </Card.Header>
-              <Card.Body flex="1" overflowY="auto">
+              <Card.Body flex="1" overflowY="auto" bg="blue.50">
                 <VStack gap={3} align="stretch">
                   {messages.map((message) => (
                     <Box
@@ -254,31 +372,41 @@ export function Chatbot() {
                 </VStack>
               </Card.Body>
               <Card.Footer p={4} borderTop="1px solid" borderColor="border.subtle">
-                <HStack w="full">
-                  <Input
-                    placeholder="Type your message..."
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    size="lg"
-                  />
-                  <Button
-                    colorPalette="brand"
-                    onClick={handleSendMessage}
-                    disabled={!inputValue.trim()}
-                    size="lg"
-                  >
-                    Send
-                  </Button>
-                </HStack>
+                {conversationComplete ? (
+                  <Box w="full" textAlign="center" py={2}>
+                    <Text color="green.600" fontWeight="bold">
+                      Conversation completed! You can now generate a PDF.
+                    </Text>
+                  </Box>
+                ) : (
+                  <HStack w="full">
+                    <Input
+                      placeholder="Type your message..."
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      size="lg"
+                      disabled={isLoading || !conversationId}
+                    />
+                    <Button
+                      colorPalette="brand"
+                      onClick={handleSendMessage}
+                      disabled={!inputValue.trim() || isLoading || !conversationId}
+                      loading={isLoading}
+                      size="lg"
+                    >
+                      Send
+                    </Button>
+                  </HStack>
+                )}
               </Card.Footer>
             </Card.Root>
           </GridItem>
 
           {/* Right: HTML Preview */}
           <GridItem>
-            <Card.Root h="full" display="flex" flexDirection="column">
-              <Card.Header>
+            <Card.Root h="full" display="flex" flexDirection="column" bg="green.50">
+              <Card.Header bg="green.100">
                 <Heading size="md">Document Preview</Heading>
               </Card.Header>
               <Card.Body flex="1" overflowY="auto" bg="white">

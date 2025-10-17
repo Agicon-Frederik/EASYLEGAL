@@ -18,6 +18,7 @@ console.log(`Environment variables loaded:`, {
   EMAIL_HOST: process.env.EMAIL_HOST ? 'SET' : 'NOT SET',
   EMAIL_USER: process.env.EMAIL_USER ? 'SET' : 'NOT SET',
   EMAIL_PASS: process.env.EMAIL_PASS ? 'SET (hidden)' : 'NOT SET',
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY ? 'SET' : 'NOT SET',
 });
 
 import app from './app';
