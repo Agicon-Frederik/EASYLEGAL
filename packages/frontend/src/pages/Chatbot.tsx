@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, GridItem, Button, Input, VStack, HStack, Text, Heading, Card, Select } from '@chakra-ui/react';
 import { createListCollection } from '@chakra-ui/react';
